@@ -7,6 +7,10 @@ confinement: devmode
 grade: devel
 base: core24
 
+platforms:
+  amd64:
+  arm64:
+
 apps:
   snap-info:
     command: bin/python $SNAP/bin/snap-info
