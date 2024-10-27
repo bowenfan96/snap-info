@@ -1,0 +1,166 @@
+name: ukuzama-snap-info
+summary: Demo snap for workshop to tabulate snap revisions
+description: Demo snap for workshop to tabulate snap revisions
+version: '0.1'
+
+confinement: devmode
+grade: devel
+base: core24
+
+apps:
+  snap-info:
+    command: bin/python $SNAP/bin/snap-info
+    plugs: [network-bind, network]
+    environment:
+      PYTHONPATH: "$SNAP/usr/lib/python3/dist-packages:$SNAP/lib/python3.12/site-packages"
+
+environment:
+  PATH: "$SNAP/libexec/snap-info:/snap/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+parts:
+  certifi:
+    plugin: python
+    source: sourcecraft:ukuzama-python-certifi
+    source-channel: 2024.08/edge
+    python-packages: []
+    build-packages:
+      - python3-wheel
+    stage:
+      - -lib/python3.12/site-packages/pip
+      - -lib/python3.12/site-packages/pip-24.0.dist-info
+      - -bin/activate*
+      - -pyvenv.cfg
+    build-environment:
+      - PIP_NO_INDEX: 'true'
+      - PIP_FIND_LINKS: $CRAFT_STAGE/
+      - PYTHONPATH: '$CRAFT_STAGE/lib/python3.12/site-packages:$CRAFT_PART_INSTALL/lib/python3.12/site-packages:/usr/lib/python312.zip:/usr/lib/python3.12:/usr/lib/python3.12/lib-dynload:/usr/local/lib/python3.12/dist-packages:/usr/lib/python3/dist-packages'
+      - PIP_NO_BUILD_ISOLATION: 'no'
+      - PIP_COMPILE: 'no'
+
+  charset-normalizer:
+    plugin: python
+    source: sourcecraft:ukuzama-charset-normalizer
+    source-channel: 3.3/edge
+    python-packages: []
+    build-packages:
+      - python3-setuptools
+    stage:
+      - -lib/python3.12/site-packages/pip
+      - -lib/python3.12/site-packages/pip-24.0.dist-info
+      - -bin/activate*
+      - -pyvenv.cfg
+    build-environment:
+      - PIP_NO_INDEX: 'true'
+      - PIP_FIND_LINKS: $SNAPCRAFT_STAGE/
+      - PYTHONPATH: '$SNAPCRAFT_STAGE/lib/python3.12/site-packages:$SNAPCRAFT_PART_INSTALL/lib/python3.12/site-packages:/usr/lib/python312.zip:/usr/lib/python3.12:/usr/lib/python3.12/lib-dynload:/usr/local/lib/python3.12/dist-packages:/usr/lib/python3/dist-packages'
+      - PIP_NO_BUILD_ISOLATION: 'no'
+      - PIP_COMPILE: 'no'
+
+  idna:
+    plugin: python
+    source: sourcecraft:ukuzama-idna
+    source-channel: 3.1/edge
+    python-packages: []
+    build-packages:
+      - python3-setuptools
+      - flit
+    stage:
+      - -lib/python3.12/site-packages/pip
+      - -lib/python3.12/site-packages/pip-24.0.dist-info
+      - -bin/activate*
+      - -pyvenv.cfg
+    build-environment:
+      - PIP_NO_INDEX: 'true'
+      - PIP_FIND_LINKS: $SNAPCRAFT_STAGE/
+      - PYTHONPATH: '$SNAPCRAFT_STAGE/lib/python3.12/site-packages:$SNAPCRAFT_PART_INSTALL/lib/python3.12/site-packages:/usr/lib/python312.zip:/usr/lib/python3.12:/usr/lib/python3.12/lib-dynload:/usr/local/lib/python3.12/dist-packages:/usr/lib/python3/dist-packages'
+      - PIP_NO_BUILD_ISOLATION: 'no'
+      - PIP_COMPILE: 'no'
+
+  urllib3:
+    plugin: python
+    source: sourcecraft:ukuzama-urllib3
+    source-channel: 2.2/edge
+    python-packages: []
+    build-packages:
+      - python3-hatchling
+    override-build: |
+      craftctl default
+      echo -e '# This file is protected via CODEOWNERS\nfrom __future__ import annotations\n__version__ = "2.2.3"' > $CRAFT_PART_INSTALL/lib/python3.12/site-packages/urllib3/_version.py
+    stage:
+      - -lib/python3.12/site-packages/pip
+      - -lib/python3.12/site-packages/pip-24.0.dist-info
+      - -bin/activate*
+      - -pyvenv.cfg
+    build-environment:
+      - PIP_NO_INDEX: 'true'
+      - PIP_FIND_LINKS: $SNAPCRAFT_STAGE/
+      - PYTHONPATH: '$SNAPCRAFT_STAGE/lib/python3.12/site-packages:$SNAPCRAFT_PART_INSTALL/lib/python3.12/site-packages:/usr/lib/python312.zip:/usr/lib/python3.12:/usr/lib/python3.12/lib-dynload:/usr/local/lib/python3.12/dist-packages:/usr/lib/python3/dist-packages'
+      - PIP_NO_BUILD_ISOLATION: 'no'
+      - PIP_COMPILE: 'no'
+
+  requests:
+    plugin: python
+    source: sourcecraft:ukuzama-requests
+    source-channel: 2.32/edge
+    python-packages: []
+    build-packages:
+      - python3-setuptools
+      - python3-wheel
+    stage:
+      - -lib/python3.12/site-packages/pip
+      - -lib/python3.12/site-packages/pip-24.0.dist-info
+      - -bin/activate*
+      - -pyvenv.cfg
+    build-environment:
+      - PIP_NO_INDEX: 'true'
+      - PIP_FIND_LINKS: $SNAPCRAFT_STAGE/
+      - PYTHONPATH: '$SNAPCRAFT_STAGE/lib/python3.12/site-packages:$SNAPCRAFT_PART_INSTALL/lib/python3.12/site-packages:/usr/lib/python312.zip:/usr/lib/python3.12:/usr/lib/python3.12/lib-dynload:/usr/local/lib/python3.12/dist-packages:/usr/lib/python3/dist-packages'
+      - PIP_NO_BUILD_ISOLATION: 'no'
+      - PIP_COMPILE: 'no'
+    after:
+      - certifi
+      - charset-normalizer
+      - idna
+      - urllib3
+
+  tabulate:
+    plugin: python
+    source: sourcecraft:ukuzama-python-tabulate
+    source-channel: 0.9/edge
+    python-packages: []
+    build-packages:
+      - python3-setuptools
+      - python3-wheel
+    stage:
+      - -lib/python3.12/site-packages/pip
+      - -lib/python3.12/site-packages/pip-24.0.dist-info
+      - -bin/activate*
+      - -pyvenv.cfg
+    build-environment:
+      - PIP_NO_INDEX: 'true'
+      - PIP_FIND_LINKS: $SNAPCRAFT_STAGE/
+      - PYTHONPATH: '$SNAPCRAFT_STAGE/lib/python3.12/site-packages:$SNAPCRAFT_PART_INSTALL/lib/python3.12/site-packages:/usr/lib/python312.zip:/usr/lib/python3.12:/usr/lib/python3.12/lib-dynload:/usr/local/lib/python3.12/dist-packages:/usr/lib/python3/dist-packages'
+      - PIP_NO_BUILD_ISOLATION: 'no'
+      - PIP_COMPILE: 'no'
+
+  snap-info:
+    plugin: python
+    source: .
+    python-packages: []
+    build-packages:
+      - python3-setuptools
+      - python3-wheel
+    stage:
+      - -lib/python3.12/site-packages/pip
+      - -lib/python3.12/site-packages/pip-24.0.dist-info
+      - -bin/activate*
+      - -pyvenv.cfg
+    build-environment:
+      - PIP_NO_INDEX: 'true'
+      - PIP_FIND_LINKS: $SNAPCRAFT_STAGE/
+      - PYTHONPATH: '$SNAPCRAFT_STAGE/lib/python3.12/site-packages:$SNAPCRAFT_PART_INSTALL/lib/python3.12/site-packages:/usr/lib/python312.zip:/usr/lib/python3.12:/usr/lib/python3.12/lib-dynload:/usr/local/lib/python3.12/dist-packages:/usr/lib/python3/dist-packages'
+      - PIP_NO_BUILD_ISOLATION: 'no'
+      - PIP_COMPILE: 'no'
+    after:
+      - requests
+      - tabulate

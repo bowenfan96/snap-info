@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=66.1.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "snap-info"
+version = "0.1.0"
+description = "Demo snap for workshop to tabulate snap revisions"
+requires-python = ">=3.8"
+
+dynamic = ["dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.in"]}
+
+[project.scripts]
+snap-info = "snap_info:main"
+
+[tool.setuptools]
+packages = ["snap_info"]
